@@ -1,7 +1,7 @@
 Changelog
 *********
 
-2.2+md.2 (unreleased)
+2.2+md.2 (2023-09-13)
 =====================
 
 - Allow empty string for input/url/inline combo.
