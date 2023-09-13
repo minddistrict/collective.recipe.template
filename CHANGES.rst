@@ -4,7 +4,7 @@ Changelog
 2.2+md.1 (unreleased)
 =====================
 
-- Nothing changed yet.
+- Sync with upstream, get rid of 2to3 warnings.
 
 2.2 (2021-12-01)
 ================
