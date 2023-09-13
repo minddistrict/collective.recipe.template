@@ -1,7 +1,7 @@
 Changelog
 *********
 
-2.2+md.1 (unreleased)
+2.2+md.1 (2023-09-13)
 =====================
 
 - Sync with upstream, get rid of 2to3 warnings.
