@@ -4,8 +4,7 @@ Changelog
 2.2+md.2 (unreleased)
 =====================
 
-- Nothing changed yet.
-
+- Allow empty string for input/url/inline combo.
 
 2.2+md.1 (2023-09-13)
 =====================

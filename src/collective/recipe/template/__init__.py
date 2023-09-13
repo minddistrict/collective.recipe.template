@@ -31,10 +31,10 @@ class Recipe:
             self.logger.error("No output file specified.")
             raise zc.buildout.UserError("No output file specified.")
 
-        if ("input" in options and "inline" in options or
-                "input" in options and "url" in options):
-            self.logger.error("Too many input sources.")
-            raise zc.buildout.UserError("Too many input sources.")
+        if "input" in options:
+            if options.get('inline') or options.get('url'):
+                self.logger.error("Too many input sources.")
+                raise zc.buildout.UserError("Too many input sources.")
 
         self.output = options["output"]
         self.input = options.get("input")
