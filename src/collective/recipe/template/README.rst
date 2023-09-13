@@ -22,20 +22,20 @@ We create a template file::
 
   >>> write('template.in',
   ... '''#
-  ... My template knows about buildout path:
+  ... My templåte knows about buildout path:
   ...   ${buildout:directory}
   ... ''')
 
 Now we can run buildout::
 
-  >>> print system(join('bin', 'buildout')),
+  >>> print(system(join('bin', 'buildout')))
   Installing template.
 
 The template was indeed created::
 
   >>> cat('template')
   #
-  My template knows about buildout path:
+  My templåte knows about buildout path:
   .../sample-buildout
 
 The variable ``buildout:directory`` was also substituted by a path.
@@ -51,28 +51,28 @@ Once again check output file content::
 
   >>> cat('template')
   #
-  My template knows about buildout path:
+  My templåte knows about buildout path:
   .../sample-buildout
 
 Let's change this file::
-  >>> print system("sed 's/sample-buildout/spam-ham-eggs/g' template > out && mv out template")
+  >>> print(system("sed 's/sample-buildout/spam-ham-eggs/g' template > out && mv out template"))
   <BLANKLINE>
 
 Let's check content now::
 
   >>> cat('template')
   #
-  My template knows about buildout path:
+  My templåte knows about buildout path:
   .../spam-ham-eggs
 
 Now try re-execute buildout, and then check our file again::
 
-  >>> print system(join('bin', 'buildout')),
+  >>> print(system(join('bin', 'buildout')))
   Updating template.
 
   >>> cat('template')
   #
-  My template knows about buildout path:
+  My templåte knows about buildout path:
   .../sample-buildout
 
 Like you see, re-execute buildout, caused overwrite ourmodified file. Let's try
@@ -92,31 +92,31 @@ and then modify again output file::
   ... overwrite = False
   ... ''')
 
-  >>> print system(join('bin', 'buildout')),
+  >>> print(system(join('bin', 'buildout')))
   Uninstalling template.
   Installing template.
 
   >>> cat('template')
   #
-  My template knows about buildout path:
+  My templåte knows about buildout path:
   .../sample-buildout
 
-  >>> print system("sed 's/sample-buildout/spam-ham-eggs/g' template > out && mv out template")
+  >>> print(system("sed 's/sample-buildout/spam-ham-eggs/g' template > out && mv out template"))
   <BLANKLINE>
 
   >>> cat('template')
   #
-  My template knows about buildout path:
+  My templåte knows about buildout path:
   .../spam-ham-eggs
 
 Let's check output file again - it shouldn't be modyfied this time::
 
-  >>> print system(join('bin', 'buildout')),
+  >>> print(system(join('bin', 'buildout')))
   Updating template.
 
   >>> cat('template')
   #
-  My template knows about buildout path:
+  My templåte knows about buildout path:
   .../spam-ham-eggs
 
 Using inline input
@@ -141,7 +141,7 @@ For very short script it can make sense to put the source directly into
 
 Now we can run buildout::
 
-  >>> print system(join('bin', 'buildout')),
+  >>> print(system(join('bin', 'buildout')))
   Uninstalling template.
   Installing template.
 
@@ -171,7 +171,7 @@ specified manually, which especially makes sense in this case:
 
 Run buildout again ::
 
-  >>> print system(join('bin', 'buildout')),
+  >>> print(system(join('bin', 'buildout')))
   Uninstalling template.
   Installing template.
 
@@ -179,7 +179,7 @@ The template should have the specified file mode::
 
   >>> from os import stat
   >>> from stat import S_IMODE
-  >>> print '%o' % S_IMODE(stat('parts/template').st_mode)
+  >>> print('%o' % S_IMODE(stat('parts/template').st_mode))
   755
 
 Using URL input
@@ -190,6 +190,8 @@ Using URL input
 
 Similarly, you may want to read input from a URL, e.g.::
 
+  >>> import os
+  >>> tmpfn = os.path.abspath(join('template.in'))
   >>> write('buildout.cfg',
   ... '''
   ... [buildout]
@@ -197,31 +199,32 @@ Similarly, you may want to read input from a URL, e.g.::
   ...
   ... [template]
   ... recipe = collective.recipe.template
-  ... url = file:///tmp/template.in
+  ... url = file://%s
   ... output = template
-  ... ''')
+  ... ''' % tmpfn)
 
 To demonstrate this, first we create a template file::
 
-  >>> write('/tmp/template.in',
+  >>> write(tmpfn,
   ... '''#
-  ... My template knows about buildout path:
+  ... My templåte knows about buildout path:
   ...   ${buildout:directory}
   ... ''')
 
 Now we can run buildout::
 
-  >>> print system(join('bin', 'buildout')),
+  >>> lines = system(join('bin', 'buildout')).splitlines()
+  >>> lines = [x for x in lines if not x.startswith('Not found:')]
+  >>> print('\n'.join(lines))
   Uninstalling template.
   Installing template.
-  ...
 
 The template should have been created::
 
   >>> cat('template')
   #
-  My template knows about buildout path:
-  .../sample-buildout
+  My templåte knows about buildout path:
+    /sample-buildout
 
 Creating a template in a variable path
 ======================================
@@ -243,7 +246,7 @@ happen in a variable path::
 
 Now we can run buildout::
 
-  >>> print system(join('bin', 'buildout')),
+  >>> print(system(join('bin', 'buildout')))
   Uninstalling template.
   Installing template.
 
@@ -251,7 +254,7 @@ The template was indeed created::
 
   >>> cat('parts', 'template')
   #
-  My template knows about buildout path:
+  My templåte knows about buildout path:
   .../sample-buildout
 
 
@@ -273,7 +276,7 @@ then the missing items will be created for us::
   ... output = ${buildout:parts-directory}/etc/template
   ... ''')
 
-  >>> print system(join('bin', 'buildout')),
+  >>> print(system(join('bin', 'buildout')))
   Uninstalling template.
   Installing template.
 
@@ -292,13 +295,13 @@ Also creation of several subdirectories is supported::
   ... output = ${buildout:parts-directory}/foo/bar/template
   ... ''')
 
-  >>> print system(join('bin', 'buildout')),
+  >>> print(system(join('bin', 'buildout')))
   Uninstalling template.
   Installing template.
 
   >>> cat('parts', 'foo', 'bar', 'template')
   #
-  My template knows about buildout path:
+  My templåte knows about buildout path:
   .../sample-buildout
 
 When changes happen to the output path, then the old path is removed
@@ -358,11 +361,11 @@ built:
 
   >>> write('template.in',
   ... '''#
-  ... My template knows about another buildout part:
+  ... My templåte knows about another buildout part:
   ... ${other:foo}
   ... ''')
 
-  >>> print system(join('bin', 'buildout')),
+  >>> print(system(join('bin', 'buildout')))
   Develop: '/sample-buildout/.'
   Uninstalling template.
   Installing other.
@@ -370,5 +373,59 @@ built:
 
   >>> cat('template')
   #
-  My template knows about another buildout part:
+  My templåte knows about another buildout part:
   bar
+
+Unchanged output files are not rewritten on update
+==================================================
+
+When output content is unchanged, the output file is not rewritten on update.
+The advantage is that the modification timestamp of the file is not changed.
+(E.g. systemd notices if the timestamp of any unit files change, and issues
+helpful "nags" reminding the user to rerun "systemctl daemon-reload".)
+
+Note the mtime of the output file:
+  >>> from os.path import getmtime
+  >>> from time import sleep
+  >>> orig_mtime = getmtime('template')
+
+Wait until new files get a different mtime
+  >>> def mtime_tick():
+  ...     write('test.stamp', '')
+  ...     return getmtime('test.stamp') > orig_mtime
+  >>> wait_until('mtime_tick', mtime_tick)
+
+Rerun the buildout:
+  >>> print(system(join('bin', 'buildout')))
+  Develop: '/sample-buildout/.'
+  Uninstalling other.
+  Installing other.
+  Updating template.
+
+The file's mtime is not changed:
+  >>> getmtime('template') == orig_mtime
+  True
+
+Change the template:
+  >>> write('template.in',
+  ... '''#
+  ... My template still knows about another buildout part:
+  ... Foo is ${other:foo}
+  ... ''')
+
+Rerun the buildout:
+  >>> print(system(join('bin', 'buildout')))
+  Develop: '/sample-buildout/.'
+  Uninstalling other.
+  Installing other.
+  Updating template.
+
+The file's mtime is changed:
+  >>> getmtime('template') > orig_mtime
+  True
+
+The output has changed:
+  >>> cat('template')
+  #
+  My template still knows about another buildout part:
+  Foo is bar

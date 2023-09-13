@@ -1,11 +1,19 @@
 Changelog
 *********
 
-2.1+md.7 (unreleased)
+2.2+md.1 (unreleased)
 =====================
 
 - Nothing changed yet.
 
+2.2 (2021-12-01)
+================
+
+* Port code and tests to Python 3 instead of using no longer supported 2to3.
+
+* Add support for Python 3.7, 3.8, 3.9, and 3.10.
+
+* Drop support for Python 3.4.
 
 2.1+md.6 (2021-03-17)
 =====================
@@ -20,6 +28,16 @@ Changelog
 * Allow to override url/input in a buildout part that inherits from another
   one.
 
+2.1 (2018-07-14)
+================
+
+* Support new ``input-encoding`` and ``output-encoding`` options.
+  [fschulze]
+
+* On update, do not rewrite the output file (thus preserving its
+  modification timestamp) unless its content has changed.
+  [dairiki]
+
 2.0 (2017-01-17)
 ================
 
@@ -31,6 +49,7 @@ Changelog
 
 * Back compatibility with zc.buildout 1.7.1 [#11]
   [mstaniszczak]
+
 
 1.12 - 2015-07-23
 =================

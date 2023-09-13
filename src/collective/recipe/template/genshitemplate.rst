@@ -24,7 +24,7 @@ We create a template file::
 
   >>> write('template.in',
   ... '''#
-  ... My template knows about buildout path:
+  ... My templåte knows about buildout path:
   ...   ${parts.buildout.directory}
   ... You can also write bash/zsh variable expansions by doubling the dollar
   ... sign like this: $${SOME_VARIABLE}
@@ -44,14 +44,14 @@ We can include a another file::
 
 Now we can run buildout::
 
-  >>> print system(join('bin', 'buildout')),
+  >>> print(system(join('bin', 'buildout')))
   Installing template.
 
 The template was indeed created::
 
   >>> cat('template')
   #
-  My template knows about buildout path:
+  My templåte knows about buildout path:
   .../sample-buildout
   You can also write bash/zsh variable expansions by doubling the dollar
   sign like this: ${SOME_VARIABLE}

@@ -16,8 +16,7 @@ class Recipe(Base):
         try:
             self.result = template.generate(
                 context).render(encoding='utf-8')
-        except UndefinedError, e:
+        except UndefinedError as e:
             raise zc.buildout.UserError(
-                "Error in template {}:\{}".format(self.input, e.msg))
-        if sys.version_info > (3,):
-            self.result = self.result.decode('utf-8')
+                "Error in template %s:\n%s" % (self.input, e.msg))
+        self.result = self.result.decode('utf-8')
