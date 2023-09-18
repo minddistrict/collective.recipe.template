@@ -1,7 +1,7 @@
 Changelog
 *********
 
-2.2+md.3 (unreleased)
+2.2+md.3 (2023-09-18)
 =====================
 
 - Remove six.
