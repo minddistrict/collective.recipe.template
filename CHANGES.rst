@@ -4,7 +4,7 @@ Changelog
 2.2+md.3 (unreleased)
 =====================
 
-- Nothing changed yet.
+- Remove six.
 
 
 2.2+md.2 (2023-09-13)

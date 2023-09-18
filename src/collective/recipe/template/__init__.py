@@ -3,8 +3,8 @@ import os
 import re
 import stat
 import sys
-from six.moves import urllib_request
-from six.moves import urllib_error
+import urllib.request
+import urllib.error
 import zc.buildout
 
 
@@ -83,11 +83,11 @@ class Recipe:
 
     def _checkurl(self):
         try:
-            self.url = urllib_request.urlopen(self.url, timeout=self.timeout)
-        except urllib_request.HTTPError as error:
+            self.url = urllib.request.urlopen(self.url, timeout=self.timeout)
+        except urllib.request.HTTPError as error:
             self.msg = error
             return False
-        except urllib_error.URLError as error:
+        except urllib.error.URLError as error:
             self.msg = error
             return False
         except ValueError as error:

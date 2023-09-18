@@ -46,7 +46,6 @@ setup(
     zip_safe=False,
     install_requires=[
         'setuptools',
-        'six',
         'zc.buildout',
     ],
     extras_require=dict(
