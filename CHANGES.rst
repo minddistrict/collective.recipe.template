@@ -4,14 +4,12 @@ Changelog
 2.2+md.4 (unreleased)
 =====================
 
-- Nothing changed yet.
-
+- Add "eggs" working set to template context when it is mentioned in the part.
 
 2.2+md.3 (2023-09-18)
 =====================
 
 - Remove six.
-
 
 2.2+md.2 (2023-09-13)
 =====================
