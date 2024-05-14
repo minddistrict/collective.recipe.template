@@ -17,7 +17,7 @@ class Recipe(Base):
             self.source,
             filepath=self.input, filename=self.input)
         context_params = {'parts': self.buildout, 'options': self.options}
-        if 'eggs' in context:
+        if 'eggs' in self.options:
             log.info('Making working set out of the eggs')
             eggs = Eggs(self.buildout, self.options['recipe'], self.options)
             __, eggs = eggs.working_set()
