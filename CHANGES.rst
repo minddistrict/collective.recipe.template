@@ -1,7 +1,7 @@
 Changelog
 *********
 
-2.2+md.4 (unreleased)
+2.2+md.4 (2024-05-14)
 =====================
 
 - Add "eggs" working set to template context when it is mentioned in the part.
