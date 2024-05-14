@@ -5,6 +5,7 @@ Changelog
 =====================
 
 - Add "eggs" working set to template context when it is mentioned in the part.
+  Shamelessly copied from `gobre.recipe.template`.
 
 2.2+md.3 (2023-09-18)
 =====================
