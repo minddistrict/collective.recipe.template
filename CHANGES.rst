@@ -4,7 +4,7 @@ Changelog
 2.2+md.5 (unreleased)
 =====================
 
-- Nothing changed yet.
+- Add missing ``zc.recipe.egg`` dependency to ``setup.py``.
 
 
 2.2+md.4 (2024-05-14)

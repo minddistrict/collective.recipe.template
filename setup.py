@@ -47,6 +47,7 @@ setup(
     install_requires=[
         'setuptools',
         'zc.buildout',
+        "zc.recipe.egg",
     ],
     extras_require=dict(
         test=['zope.testing', 'zope.testrunner'],
