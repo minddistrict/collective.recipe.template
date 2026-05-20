@@ -1,10 +1,11 @@
 # Generated from:
 # https://github.com/zopefoundation/meta/tree/master/config/buildout-recipe
+include *.md
 include *.rst
 include *.txt
 include buildout.cfg
 include tox.ini
-include .coveragerc
+include .pre-commit-config.yaml
 
 recursive-include src *.py
 recursive-include src *.rst

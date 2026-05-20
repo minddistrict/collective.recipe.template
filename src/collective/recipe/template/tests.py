@@ -1,12 +1,11 @@
 """Test setup for collective.recipe.template.
 """
 
+import doctest
 import re
+import unittest
 
 import zc.buildout.testing
-
-import doctest
-import unittest
 from zope.testing import renormalizing
 
 
@@ -14,7 +13,6 @@ def setUp(test):
     zc.buildout.testing.buildoutSetUp(test)
     zc.buildout.testing.install_develop('collective.recipe.template', test)
     zc.buildout.testing.install('zope.testing', test)
-    zc.buildout.testing.install('six', test)
     zc.buildout.testing.install('Genshi', test)
 
 

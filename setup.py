@@ -1,37 +1,30 @@
-from setuptools import setup, find_packages
-import os
-import sys
+from pathlib import Path
+
+from setuptools import find_namespace_packages
+from setuptools import setup
+
 
 version = '2.3.dev0'
-
-genshi_requirement = 'Genshi'
-if sys.version_info >= (3,):
-    genshi_requirement = 'Genshi>=0.7.0'
 
 setup(
     name='collective.recipe.template',
     version=version,
     description="Buildout recipe to generate a text file from a template",
-    long_description=(
-        open("README.rst", "rb").read().decode("utf-8")
-        + "\n\n"
-        + open(os.path.join("src", "collective", "recipe", "template",
-                            "README.rst"), "rb").read().decode("utf-8")
-        + "\n\n"
-        + open("CHANGES.rst", "rb").read().decode("utf-8")
+    long_description='\n'.join(
+        Path(f).read_text(encoding='utf-8')
+        for f in ('README.rst',
+                  'src/collective/recipe/template/README.rst',
+                  'CHANGES.rst')
     ),
     classifiers=[
         "Framework :: Buildout",
         "Programming Language :: Python",
-        "Programming Language :: Python :: 2",
-        "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.5",
-        "Programming Language :: Python :: 3.6",
-        "Programming Language :: Python :: 3.7",
-        "Programming Language :: Python :: 3.8",
-        "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: 3.13",
+        "Programming Language :: Python :: 3.14",
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
     keywords='template recipe',
@@ -39,19 +32,18 @@ setup(
     author_email='wichert@wiggy.net',
     url='https://github.com/collective/collective.recipe.template',
     license='BSD',
-    packages=find_packages('src'),
+    packages=find_namespace_packages('src'),
     package_dir={'': 'src'},
-    namespace_packages=['collective', 'collective.recipe'],
     include_package_data=True,
     zip_safe=False,
+    python_requires='>=3.10',
     install_requires=[
         'setuptools',
-        'six',
         'zc.buildout',
     ],
     extras_require=dict(
         test=['zope.testing', 'zope.testrunner'],
-        genshi=[genshi_requirement, ],
+        genshi=['Genshi>=0.7.0'],
     ),
     entry_points="""
     [zc.buildout]

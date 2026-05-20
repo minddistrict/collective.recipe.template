@@ -340,6 +340,7 @@ built:
   ... from setuptools import setup
   ...
   ... setup(name='dummyrecipe',
+  ...       py_modules=['dummy'],
   ...       entry_points = {'zc.buildout': ['default = dummy:Recipe']})
   ... ''')
 

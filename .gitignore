@@ -28,4 +28,6 @@ lib64
 log/
 parts/
 pyvenv.cfg
+testing.log
 var/
+share

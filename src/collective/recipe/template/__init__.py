@@ -2,9 +2,9 @@ import logging
 import os
 import re
 import stat
-import sys
-from six.moves import urllib_request
-from six.moves import urllib_error
+import urllib.error
+import urllib.request
+
 import zc.buildout
 
 
@@ -74,20 +74,16 @@ class Recipe:
 
     def _execute(self):
         template = self.source
-        if sys.version_info < (3,):
-            template = template.encode('utf-8')
         template = re.sub(r"\$\{([^:]+?)\}", r"${%s:\1}" % self.name, template)
         self.result = self.options._sub(template, [])
-        if sys.version_info < (3,):
-            self.result = self.result.decode('utf-8')
 
     def _checkurl(self):
         try:
-            self.url = urllib_request.urlopen(self.url, timeout=self.timeout)
-        except urllib_request.HTTPError as error:
+            self.url = urllib.request.urlopen(self.url, timeout=self.timeout)
+        except urllib.error.HTTPError as error:
             self.msg = error
             return False
-        except urllib_error.URLError as error:
+        except urllib.error.URLError as error:
             self.msg = error
             return False
         except ValueError as error:
@@ -123,7 +119,7 @@ class Recipe:
         try:
             with open(self.output, "rb") as f:
                 output = f.read()
-        except IOError:
+        except OSError:
             result_changed = True
         else:
             result_changed = output != self.result.encode(self.output_encoding)
