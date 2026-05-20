@@ -11,9 +11,11 @@ setup(
     description="Buildout recipe to generate a text file from a template",
     long_description='\n'.join(
         Path(f).read_text(encoding='utf-8')
-        for f in ('README.rst',
-                  'src/collective/recipe/template/README.rst',
-                  'CHANGES.rst')
+        for f in (
+            'README.rst',
+            Path('src') / 'collective' / 'recipe' / 'template' / 'README.rst',
+            'CHANGES.rst',
+        )
     ),
     classifiers=[
         "Framework :: Buildout",
