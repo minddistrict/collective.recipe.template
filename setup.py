@@ -3,7 +3,7 @@ from pathlib import Path
 from setuptools import setup
 
 
-version = '3.0.0.dev0'
+version = '3.0.0'
 
 setup(
     name='collective.recipe.template',
