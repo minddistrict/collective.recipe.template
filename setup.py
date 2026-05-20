@@ -1,6 +1,5 @@
 from pathlib import Path
 
-from setuptools import find_namespace_packages
 from setuptools import setup
 
 
@@ -12,9 +11,11 @@ setup(
     description="Buildout recipe to generate a text file from a template",
     long_description='\n'.join(
         Path(f).read_text(encoding='utf-8')
-        for f in ('README.rst',
-                  'src/collective/recipe/template/README.rst',
-                  'CHANGES.rst')
+        for f in (
+            'README.rst',
+            Path('src') / 'collective' / 'recipe' / 'template' / 'README.rst',
+            'CHANGES.rst',
+        )
     ),
     classifiers=[
         "Framework :: Buildout",
@@ -32,8 +33,6 @@ setup(
     author_email='wichert@wiggy.net',
     url='https://github.com/collective/collective.recipe.template',
     license='BSD',
-    packages=find_namespace_packages('src'),
-    package_dir={'': 'src'},
     include_package_data=True,
     zip_safe=False,
     python_requires='>=3.10',
