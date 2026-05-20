@@ -18,6 +18,7 @@ setup(
         )
     ),
     classifiers=[
+        "Development Status :: 6 - Mature",
         "Framework :: Buildout",
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
