@@ -1,8 +1,8 @@
 Changelog
 *********
 
-2.3 (unreleased)
-================
+3.0.0 (unreleased)
+==================
 
 * Drop support for Python 2 and Python 3 versions older than 3.10.
   [szakitibi]
