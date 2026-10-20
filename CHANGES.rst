@@ -4,7 +4,18 @@ Changelog
 2.2+md.6 (unreleased)
 =====================
 
-- Nothing changed yet.
+- Let a template download survive a slow network. Buildout creates every part
+  before it installs any, so one failed download stopped the whole run and the
+  checkout got no parts at all.
+
+  The download is now tried three times, with a growing wait in between, and
+  the default ``timeout`` went from 1 to 30 seconds. On a busy link a
+  connection often needs more than a second and still succeeds.
+
+  A timeout while waiting for the response, or while reading it, arrives as a
+  ``TimeoutError`` and not as a ``URLError``. Those were not caught and left
+  buildout with a traceback. They are now reported as a buildout error that
+  names the URL, the part and the number of attempts.
 
 
 2.2+md.5 (2025-11-05)

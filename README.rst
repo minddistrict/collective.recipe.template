@@ -40,8 +40,12 @@ Features
 * Starting with version 1.5, you can use inline templates.
 * Starting with version 1.7, you can use `genshi text templates`_.
 * Starting with version 1.9, you can use a URL to specify template input.
-* Starting with version 1.12, you can specify ``timeout`` as an option to
-  configure ``urllib2`` requests.
+* Starting with version 1.12, you can specify ``timeout`` as an option to set
+  how long the recipe waits for a URL download. The default is 30 seconds.
+* Starting with version 2.2+md.6, a download that fails because of a network
+  problem or a server error is tried again, three times in total, with a
+  growing wait in between. A 404 or another client error is not retried,
+  because the answer would be the same.
 * Starting with version 2.1, you can set ``input-encoding`` and
   ``output-encoding`` to specify the character encoding.
 
