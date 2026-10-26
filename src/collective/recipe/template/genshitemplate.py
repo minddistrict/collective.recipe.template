@@ -13,6 +13,11 @@ class Recipe(Base):
     def _execute(self):
         from genshi.template import Context, NewTextTemplate
         from genshi.template.eval import UndefinedError
+        # Genshi builds the search path for {% include %} out of "filepath",
+        # so a template that came from a URL must keep passing None here:
+        # with the URL, every include would resolve against a directory that
+        # does not exist and render as nothing. Without it, an include
+        # resolves against the buildout directory.
         template = NewTextTemplate(
             self.source,
             filepath=self.input, filename=self.input)

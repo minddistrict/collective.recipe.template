@@ -10,12 +10,25 @@ Changelog
 
   The download is now tried three times, with a growing wait in between, and
   the default ``timeout`` went from 1 to 30 seconds. On a busy link a
-  connection often needs more than a second and still succeeds.
+  connection often needs more than a second and still succeeds. The timeout
+  counts per attempt. The new options ``attempts`` and ``retry-wait`` set how
+  often a part tries and how long it waits; a value that is not a number is
+  now reported as a buildout error that names the part.
 
-  A timeout while waiting for the response, or while reading it, arrives as a
-  ``TimeoutError`` and not as a ``URLError``. Those were not caught and left
-  buildout with a traceback. They are now reported as a buildout error that
-  names the URL, the part and the number of attempts.
+  Several ways in which a download fails are not a ``URLError``: a timeout
+  while waiting for the response or while reading it arrives as a
+  ``TimeoutError``, and a connection that breaks halfway through the body as
+  an ``IncompleteRead``. None of these were caught, and the reading of the
+  body sat outside the ``try`` as well, so they left buildout with a
+  traceback. They are now reported as a buildout error that names the part,
+  the URL and the number of attempts. Before every next attempt the recipe
+  logs a warning, so that a slow buildout does not look like a stuck one.
+
+  Only a download over the network is tried again. A local file that is not
+  there, an unknown URL scheme and an answer such as a 404 give the same
+  result every time, so those are reported after one attempt. A template that
+  cannot be decoded is reported as an encoding problem and not as a failed
+  download, for the same reason.
 
 
 2.2+md.5 (2025-11-05)

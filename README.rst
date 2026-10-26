@@ -42,12 +42,21 @@ Features
 * Starting with version 1.9, you can use a URL to specify template input.
 * Starting with version 1.12, you can specify ``timeout`` as an option to set
   how long the recipe waits for a URL download. The default is 30 seconds.
-* Starting with version 2.2+md.6, a download that fails because of a network
-  problem or a server error is tried again, three times in total, with a
-  growing wait in between. A 404 or another client error is not retried,
-  because the answer would be the same.
+  It counts per attempt, not for all attempts together.
 * Starting with version 2.1, you can set ``input-encoding`` and
   ``output-encoding`` to specify the character encoding.
+* Starting with version 2.2+md.6, a download that failed by accident is tried
+  again. The recipe makes three attempts, and waits one second before the
+  second and two seconds before the third. The ``attempts`` and ``retry-wait``
+  options change these numbers. Tried again are a network failure and the HTTP
+  statuses 408, 429, 500, 502, 503 and 504. Any other answer, a 404 for
+  example, is not tried again, because it would be the same answer. A URL that
+  is not ``http``, ``https`` or ``ftp`` is not tried again either: a local file
+  gives the same result every time.
+
+  With the default options, a host that never answers takes about 93 seconds
+  (three attempts of 30 seconds, plus 3 seconds of waiting) before the part
+  reports the failure.
 
 Genshi text templates
 ---------------------
