@@ -1,7 +1,7 @@
 Changelog
 *********
 
-2.2+md.6 (unreleased)
+2.2+md.6 (2026-10-26)
 =====================
 
 - Let a template download survive a slow network. Buildout creates every part
