@@ -8,6 +8,8 @@ import doctest
 import unittest
 from zope.testing import renormalizing
 
+from collective.recipe.template import test_download
+
 
 def setUp(test):
     zc.buildout.testing.buildoutSetUp(test)
@@ -36,4 +38,5 @@ def test_suite():
             setUp=setUp, tearDown=zc.buildout.testing.buildoutTearDown,
             optionflags=doctest.ELLIPSIS | doctest.NORMALIZE_WHITESPACE,
             checker=checker),
+        test_download.test_suite(),
     ])

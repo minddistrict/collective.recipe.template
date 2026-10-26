@@ -3,12 +3,26 @@ import os
 import re
 import stat
 import sys
+import time
 import urllib.request
 import urllib.error
 import zc.buildout
 
 
 TRUE_VALUES = ('y', 'yes', '1', 'true')
+
+# How often a template download is tried before the part gives up, and the
+# first wait in between. The wait doubles after every failed attempt.
+DOWNLOAD_ATTEMPTS = 3
+DOWNLOAD_BACKOFF = 1.0
+# Seconds to wait for a download when the part sets no "timeout" option.
+# Generous on purpose: on a busy link a connection can take more than ten
+# seconds and still succeed, and aborting the buildout costs far more than
+# waiting does.
+DOWNLOAD_TIMEOUT = 30.0
+# HTTP statuses that deserve another attempt. Every other 4xx says the
+# request itself is wrong, so repeating it cannot help.
+RETRY_STATUSES = frozenset((408, 429, 500, 502, 503, 504))
 
 
 class Recipe:
@@ -42,7 +56,7 @@ class Recipe:
         self.output_encoding = options.get("output-encoding", "utf-8")
         self.inline = options.get("inline")
         self.url = options.get("url")
-        self.timeout = float(options.get("timeout", 1.0))
+        self.timeout = float(options.get("timeout", DOWNLOAD_TIMEOUT))
         self.overwrite = options.get(
             "overwrite", 'true').lower() in TRUE_VALUES
         if "inline" in options:
@@ -55,15 +69,15 @@ class Recipe:
         elif "input" in options and self.input.startswith('inline:'):
             self.source = self.input[len('inline:'):].lstrip()
             self.mode = None
-        elif "url" in options and self._checkurl():
-            self.source = self.url.read().decode(self.input_encoding)
+        elif "url" in options:
+            source = self._download()
+            if source is None:
+                self.logger.error(self.msg)
+                raise zc.buildout.UserError(self.msg)
+            self.source = source
             self.mode = None
         else:
-            # If the error is not from urllib2
-            if self.url is None:
-                msg = "Input file '%s' does not exist." % self.input
-            else:
-                msg = self.msg
+            msg = "Input file '%s' does not exist." % self.input
             self.logger.error(msg)
             raise zc.buildout.UserError(msg)
 
@@ -81,19 +95,49 @@ class Recipe:
         if sys.version_info < (3,):
             self.result = self.result.decode('utf-8')
 
-    def _checkurl(self):
-        try:
-            self.url = urllib.request.urlopen(self.url, timeout=self.timeout)
-        except urllib.request.HTTPError as error:
-            self.msg = error
-            return False
-        except urllib.error.URLError as error:
-            self.msg = error
-            return False
-        except ValueError as error:
-            self.msg = error
-            return False
-        return True
+    def _download(self):
+        """Return the template text at ``self.url``.
+
+        Returns ``None`` and sets ``self.msg`` when every attempt failed.
+
+        Both the request and the reading of the body sit inside the same
+        ``try``: a slow server can time out at either point, and until now a
+        timeout during the read escaped the recipe as a traceback.
+        """
+        last_error = None
+        for attempt in range(1, DOWNLOAD_ATTEMPTS + 1):
+            try:
+                with urllib.request.urlopen(
+                        self.url, timeout=self.timeout) as response:
+                    return response.read().decode(self.input_encoding)
+            except urllib.error.HTTPError as error:
+                last_error = error
+                if error.code not in RETRY_STATUSES:
+                    # The server understood us and said no. Asking again
+                    # gives the same answer.
+                    break
+            except OSError as error:
+                # URLError covers DNS, connect and proxy failures. A timeout
+                # while waiting for the response, or while reading it,
+                # arrives as a plain TimeoutError instead. That is an
+                # OSError but not a URLError, so catching URLError alone
+                # would let it through.
+                last_error = error
+            except ValueError as error:
+                # A malformed URL. Repeating it cannot help.
+                last_error = error
+                break
+            if attempt < DOWNLOAD_ATTEMPTS:
+                time.sleep(DOWNLOAD_BACKOFF * 2 ** (attempt - 1))
+        self.msg = (
+            "Could not download the template for part '%s' from %s after "
+            "%s: %s" % (
+                self.name,
+                self.url,
+                '1 attempt' if attempt == 1 else '%s attempts' % attempt,
+                last_error,
+            ))
+        return None
 
     def install(self):
         if not self.overwrite and os.path.isfile(self.output):

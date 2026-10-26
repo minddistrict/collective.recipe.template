@@ -27,6 +27,7 @@ class Recipe(Base):
             self.result = template.generate(
                 context).render(encoding='utf-8')
         except UndefinedError as e:
+            # A URL template has no "input", so name the URL instead.
             raise zc.buildout.UserError(
-                'Error in template %s:\n%s' % (self.input, e.msg))
+                'Error in template %s:\n%s' % (self.input or self.url, e.msg))
         self.result = self.result.decode('utf-8')
